@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 type Flake = {
@@ -50,10 +50,12 @@ function Snow() {
 export default function Page() {
   const [opened, setOpened] = useState(false);
   const [lights, setLights] = useState(false);
+  const flashRef = useRef<HTMLDivElement>(null);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
       <Snow />
+      <div ref={flashRef} className="flash-layer" />
 
       {/* Fondo animado */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -68,11 +70,9 @@ export default function Page() {
           <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
             FELIZ NAVIDAD MI AMOR 🎄
           </h1>
-
           <p className="mt-3 text-base text-white/75">
             Un detallito navideño para que te llegue estés donde estés
           </p>
-
           <p className="mt-2 text-base text-white/75">
             Te extraño muchoooooo
           </p>
@@ -137,7 +137,14 @@ export default function Page() {
 
                 {/* Botón */}
                 <button
-                  onClick={() => setOpened((v) => !v)}
+                  onClick={() => {
+                    setOpened((v) => !v);
+                    if (flashRef.current) {
+                      flashRef.current.classList.remove("flash");
+                      void flashRef.current.offsetWidth;
+                      flashRef.current.classList.add("flash");
+                    }
+                  }}
                   className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-white/90 hover:bg-white/15 active:scale-[0.98]"
                 >
                   {opened ? "Cerrar regalo" : "Abrir regalo"}
@@ -154,12 +161,12 @@ export default function Page() {
               >
                 {/* Foto */}
                 {opened && (
-                  <div className="mx-auto mb-6 h-80 w-80 sm:h-[420px] sm:w-[420px] overflow-hidden rounded-3xl border border-white/10 shadow-2xl ring-1 ring-white/20">
+                  <div className="mx-auto mb-6 w-full max-w-[320px] sm:max-w-[420px] aspect-square overflow-hidden rounded-3xl border border-white/10 shadow-2xl ring-1 ring-white/20">
                     <Image
                       src="/miamor.jpeg"
                       alt="Nosotros"
-                      width={1200}
-                      height={1200}
+                      width={800}
+                      height={800}
                       className="h-full w-full object-cover"
                       priority
                     />
@@ -171,7 +178,7 @@ export default function Page() {
                 <p className="mt-2 text-white/80">
                   Feliz navidad mi amoor, espero que la pases muy bonito rodeada de tu
                   familia, fue nuestra primera navidad juntos bajo un arbolito mi amoor,
-                  de hecho fue la primera vez que armo un árbol mi amor y estoy muy
+                  de hecho fue la primera vez que armé un árbol propio mi amor y estoy muy
                   feliz de haberlo armado contigo 💞, quedó muy bonito.
                 </p>
 

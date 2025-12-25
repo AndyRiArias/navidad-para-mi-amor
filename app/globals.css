@@ -90,4 +90,28 @@ body {
   }
 }
 
+/* Destello mágico */
+.flash-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.4) 30%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  z-index: 50;
+}
+
+.flash {
+  animation: flashEffect 0.7s ease-out;
+}
+
+@keyframes flashEffect {
+  0% { opacity: 0; }
+  40% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
